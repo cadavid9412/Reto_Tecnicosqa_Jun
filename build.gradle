@@ -1,51 +1,42 @@
-apply plugin: 'java-library'
-apply plugin: 'net.serenity-bdd.aggregator'
+plugins {
+    id "net.serenity-bdd.serenity-gradle-plugin" version "4.0.27"
+    id 'java'
+    id 'idea'
+}
 
+group = 'org.example'
+version = '1'
+
+ext {
+    serenityCoreVersion = '4.0.44'
+    junitVersion = '5.10.0'
+    slf4jVersion='2.0.6'
+}
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    jcenter()
 }
 
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.80")
-    }
-}
-
+defaultTasks 'clean','test','aggregate'
 
 dependencies {
-
-    implementation 'net.serenity-bdd:serenity-junit:2.0.80'
-    implementation 'net.serenity-bdd:serenity-cucumber:1.9.45'
-    implementation 'net.serenity-bdd:serenity-core:2.0.80'
-    implementation 'org.slf4j:slf4j-simple:1.7.7'
-    implementation 'com.google.guava:guava:23.0'
-    implementation group: 'org.apache.poi', name: 'poi', version: '3.17'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
-
-
-
-
+    implementation "net.serenity-bdd:serenity-cucumber:${serenityCoreVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}"
+    testImplementation "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-junit:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-cucumber:${serenityCoreVersion}",
+            "org.junit.jupiter:junit-jupiter-api:${junitVersion}",
+            "org.slf4j:slf4j-simple:${slf4jVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.20.0'
 }
 
 
 test {
-
     ignoreFailures = true
 }
-
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-
 gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)
