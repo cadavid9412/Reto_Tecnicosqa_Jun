@@ -65,15 +65,3 @@ The workflow runs automatically on **push** or **pull request** events targeting
 
 ---
 
-## 📌 Additional Considerations
-
-- **Code Management**  
-  Ensure your `.gitignore` excludes generated folders such as `build/` and `.gradle/`.
-
-- **Code Quality**  
-  Consider integrating static analysis tools (e.g., Checkstyle, PMD, SpotBugs) for better code quality and maintainability.
-
-- **Dependency Updates**  
-  Periodically update Serenity, JUnit, Selenium, and other dependencies to stay current and secure.
-
----
