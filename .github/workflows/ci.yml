@@ -20,20 +20,18 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install Google Chrome
+      - name: Install Chrome for Testing (137.0.7151.68)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+          wget https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.68/linux64/chrome-linux64.zip
+          unzip chrome-linux64.zip
+          sudo mv chrome-linux64 /opt/chrome
+          sudo ln -sf /opt/chrome/chrome /usr/bin/google-chrome
 
-      - name: Install matching ChromeDriver version
+      - name: Install ChromeDriver (137.0.7151.68)
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}")
-          echo "Using Chrome version: $CHROME_VERSION"
-          echo "Using ChromeDriver version: $CHROMEDRIVER_VERSION"
-          wget https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip -O chromedriver.zip
+          wget https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.68/linux64/chromedriver-linux64.zip -O chromedriver.zip
           unzip chromedriver.zip
-          sudo mv chromedriver /usr/local/bin/
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Grant execution rights to Gradle wrapper
